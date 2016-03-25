@@ -30,9 +30,9 @@ import requests
 
 class HTTPOutClient(Actor):
 
-    '''**Posts data to the requested URL**
+    '''**Submit data to a http API.**
 
-    Posts data to a remote URL
+    Submit data to a http API.
 
 
     Parameters:
