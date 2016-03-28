@@ -11,7 +11,7 @@
     wishbone.output.http
     ====================
 
-    Version: 0.1.0
+    Version: 1.0.0
 
     Posts data to the requested URL
     -------------------------------
