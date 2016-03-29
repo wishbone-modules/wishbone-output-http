@@ -35,7 +35,7 @@ install_requires = [
 ]
 
 try:
-    with open('README.md', 'rt') as f:
+    with open('README.rst', 'rt') as f:
         long_description = f.read()
 except IOError:
     long_description = ''
