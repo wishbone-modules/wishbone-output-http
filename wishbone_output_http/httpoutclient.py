@@ -22,7 +22,8 @@
 #
 #
 
-from gevent import monkey; monkey.patch_all()
+from gevent import monkey
+monkey.patch_all()
 from wishbone import Actor
 from wishbone.event import Bulk
 import requests
@@ -37,7 +38,7 @@ class HTTPOutClient(Actor):
 
     Parameters:
 
-        - selection(str)("@data")
+        - selection(str)("@data")*
            |  The part of the event to submit externally.
            |  Use an empty string to refer to the complete event.
 
@@ -50,7 +51,7 @@ class HTTPOutClient(Actor):
         - accept(str)("text/plain")*
            |  The accept value to use.
 
-        - url(str)("http://localhost")
+        - url(str)("http://localhost")*
            |  The url to submit the data to
 
         - username(str)*
@@ -59,7 +60,7 @@ class HTTPOutClient(Actor):
         - password(str)*
            |  The password to authenticate
 
-        - allow_redirects(bool)(False)
+        - allow_redirects(bool)(False)*
            |  Allow redirects.
 
         - timeout(float)(10)*
@@ -75,7 +76,15 @@ class HTTPOutClient(Actor):
            |  Outgoing messges
     '''
 
-    def __init__(self, config, selection="@data", method="PUT", content_type="application/json", accept="text/plain", url="https://localhost", username=None, password=None, timeout=10):
+    def __init__(self, config, selection="@data",
+                 method="PUT",
+                 content_type="application/json",
+                 accept="text/plain",
+                 url="https://localhost",
+                 username=None,
+                 password=None,
+                 allow_redirects=False,
+                 timeout=10):
 
         Actor.__init__(self, config)
         self.pool.createQueue("inbox")
@@ -106,28 +115,27 @@ class HTTPOutClient(Actor):
             response.raise_for_status()
         except Exception as err:
             if response is not None:
-              event.set(str(response.text), "@tmp.%s.server_response" % (self.name))
-            raise Exception("Failed to submit data.  Reason: %s" % (err))
+                event.set(str(response.text), "@tmp.%s.server_response" % (self.name))
+            raise Exception("Failed to submit data.  Reason: %s" % (err.message))
 
     def __put(self, data):
 
         return requests.put(
-          self.kwargs.url,
-          data=str(data),
-          auth=(self.kwargs.username, self.kwargs.password),
-          headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
-          allow_redirects=self.kwargs.allow_redirects,
-          timeout=self.kwargs.timeout
+            self.kwargs.url,
+            data=str(data),
+            auth=(self.kwargs.username, self.kwargs.password),
+            headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
+            allow_redirects=self.kwargs.allow_redirects,
+            timeout=self.kwargs.timeout
         )
 
     def __post(self, data):
 
         return requests.post(
-          self.kwargs.url,
-          data=str(data),
-          auth=(self.kwargs.username, self.kwargs.password),
-          headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
-          allow_redirects=self.kwargs.allow_redirects,
-          timeout=self.kwargs.timeout
+            self.kwargs.url,
+            data=str(data),
+            auth=(self.kwargs.username, self.kwargs.password),
+            headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
+            allow_redirects=self.kwargs.allow_redirects,
+            timeout=self.kwargs.timeout
         )
-
