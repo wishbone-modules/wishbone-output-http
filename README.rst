@@ -4,9 +4,10 @@
     .--.--.--|__.-----|  |--|  |--.-----.-----.-----.
     |  |  |  |  |__ --|     |  _  |  _  |     |  -__|
     |________|__|_____|__|__|_____|_____|__|__|_____|
-                                       version 2.1.2
+                                       version 2.1.3
 
     Build composable event pipeline servers with minimal effort.
+
 
 
     ====================
@@ -15,16 +16,16 @@
 
     Version: 1.0.1
 
-    Posts data to the requested URL
-    -------------------------------
+    Submit data to a http API.
+    --------------------------
 
 
-        Posts data to a remote URL
+        Submit data to a http API.
 
 
         Parameters:
 
-            - selection(str)("@data")
+            - selection(str)("@data")*
                |  The part of the event to submit externally.
                |  Use an empty string to refer to the complete event.
 
@@ -37,7 +38,7 @@
             - accept(str)("text/plain")*
                |  The accept value to use.
 
-            - url(str)("http://localhost")
+            - url(str)("http://localhost")*
                |  The url to submit the data to
 
             - username(str)*
@@ -46,7 +47,7 @@
             - password(str)*
                |  The password to authenticate
 
-            - allow_redirects(bool)(False)
+            - allow_redirects(bool)(False)*
                |  Allow redirects.
 
             - timeout(float)(10)*
@@ -58,5 +59,4 @@
             - inbox
                |  Incoming messages
 
-            - outbox
-               |  Outgoing messges
+

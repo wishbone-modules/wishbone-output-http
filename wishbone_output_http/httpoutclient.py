@@ -42,7 +42,7 @@ class HTTPOutClient(Actor):
            |  The part of the event to submit externally.
            |  Use an empty string to refer to the complete event.
 
-        - method(str)("PUT")*
+        - method(str)("PUT")
            |  The http method to use. PUT/POST
 
         - content_type(str)("application/json")*
@@ -72,8 +72,6 @@ class HTTPOutClient(Actor):
         - inbox
            |  Incoming messages
 
-        - outbox
-           |  Outgoing messges
     '''
 
     def __init__(self, config, selection="@data",
