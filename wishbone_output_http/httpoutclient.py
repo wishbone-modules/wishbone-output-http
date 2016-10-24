@@ -106,15 +106,25 @@ class HTTPOutClient(Actor):
             data = event.dumpFieldAsString(self.kwargs.selection)
         else:
             data = str(event.get(self.kwargs.selection))
-
         response = None
+
         try:
             response = self.submitToResource(data)
+            response.close()
             response.raise_for_status()
         except Exception as err:
             if response is not None:
                 event.set(str(response.text), "@tmp.%s.server_response" % (self.name))
+                event.set(response.status_code, "@tmp.%s.status_code" % (response.status) )
             raise Exception("Failed to submit data.  Reason: %s" % (err.message))
+        else:
+            event.set(str(response.text), key="@tmp.%s.server_response" % (self.name))
+            event.set(str(response.status_code), key="@tmp.%s.server_status_code" % (self.name))
+
+            try:
+                event.set(response.json(), key="@tmp.%s.server_response_json" % (self.name))
+            except ValueError as err:
+                self.logging.debug("Failed to set field @tmp.%s.server_response_json. Server response not JSON. Reason: %s" % (self.name, err))
 
     def __put(self, data):
 

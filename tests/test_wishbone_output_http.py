@@ -44,7 +44,7 @@ class WebServer():
         env["wsgi.input"] = i
 
         self.q.put(env)
-        yield "<b>hello world</b>"
+        yield '{"message": "hello world!"}'
 
     def start(self):
         spawn(self.wsgi.start)
@@ -65,7 +65,7 @@ class WebServerTimeout():
         i = env["wsgi.input"].readlines()
         env["wsgi.input"] = i
         self.q.put(env)
-        yield "<b>hello world</b>"
+        yield '{"message": "hello world!"}'
 
     def start(self):
         spawn(self.wsgi.start)
@@ -193,3 +193,19 @@ def test_module_http_timeout():
     one = getter(http.pool.queue.failed)
     assert "Read timed out" in one.dump(complete=True)["@errors"]["httpoutclient"][2]
     webserver.stop()
+
+def test_module_http_ok_server_response():
+
+    webserver = WebServer()
+    webserver.start()
+
+    actor_config = ActorConfig('httpoutclient', 100, 1, {}, "")
+    http = HTTPOutClient(actor_config, url="http://localhost:8088/", accept="monkeyballs")
+    http.pool.queue.inbox.disableFallThrough()
+    http.start()
+
+    e = Event('{"one": 1}')
+
+    http.pool.queue.inbox.put(e)
+    sleep(1)
+    assert(e.get("@tmp.httpoutclient.server_response_json")["message"] == "hello world!")
