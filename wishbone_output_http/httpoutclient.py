@@ -110,6 +110,7 @@ class HTTPOutClient(Actor):
 
         try:
             response = self.submitToResource(data)
+            response.close()
             response.raise_for_status()
         except Exception as err:
             if response is not None:
@@ -121,9 +122,9 @@ class HTTPOutClient(Actor):
             event.set(str(response.status_code), key="@tmp.%s.server_status_code" % (self.name))
 
             try:
-                event.set(str(response.json()), key="@tmp.%s.server_response_json" % (self.name))
-            except Exception as err:
-                self.logging.debug("Failed to set field @tmp.%s.server_response_json. Server response not JSON? Reason: %s" % (self.name, err))
+                event.set(response.json(), key="@tmp.%s.server_response_json" % (self.name))
+            except ValueError as err:
+                self.logging.debug("Failed to set field @tmp.%s.server_response_json. Server response not JSON. Reason: %s" % (self.name, err))
 
     def __put(self, data):
 
