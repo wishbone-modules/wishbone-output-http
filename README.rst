@@ -14,7 +14,7 @@
     wishbone.output.http
     ====================
 
-    Version: 1.1.0
+    Version: 1.1.1
 
     Submit data to a http API.
     --------------------------
@@ -37,6 +37,9 @@
 
             - accept(str)("text/plain")*
                |  The accept value to use.
+
+            - additional_headers(dict)({})
+               |  A dictionary of additional headers.
 
             - url(str)("http://localhost")*
                |  The url to submit the data to
