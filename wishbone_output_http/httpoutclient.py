@@ -51,9 +51,6 @@ class HTTPOutClient(Actor):
         - accept(str)("text/plain")*
            |  The accept value to use.
 
-        - additional_headers(dict)({})
-           |  A dictionary of additional headers.
-
         - url(str)("http://localhost")*
            |  The url to submit the data to
 
@@ -81,7 +78,6 @@ class HTTPOutClient(Actor):
                  method="PUT",
                  content_type="application/json",
                  accept="text/plain",
-                 additional_headers={},
                  url="https://localhost",
                  username=None,
                  password=None,
@@ -132,28 +128,22 @@ class HTTPOutClient(Actor):
 
     def __put(self, data):
 
-        headers = {'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept}
-        headers.update(self.kwargs.additional_headers)
-
         return requests.put(
             self.kwargs.url,
             data=str(data),
             auth=(self.kwargs.username, self.kwargs.password),
-            headers=headers,
+            headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
             allow_redirects=self.kwargs.allow_redirects,
             timeout=self.kwargs.timeout
         )
 
     def __post(self, data):
 
-        headers = {'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept}
-        headers.update(self.kwargs.additional_headers)
-
         return requests.post(
             self.kwargs.url,
             data=str(data),
             auth=(self.kwargs.username, self.kwargs.password),
-            headers=headers,
+            headers={'Content-type': self.kwargs.content_type, 'Accept': self.kwargs.accept},
             allow_redirects=self.kwargs.allow_redirects,
             timeout=self.kwargs.timeout
         )

@@ -73,7 +73,6 @@ class WebServerTimeout():
     def stop(self):
         self.wsgi.stop()
 
-
 def test_module_http_default():
 
     webserver = WebServer()
@@ -114,6 +113,7 @@ def test_module_http_post():
     assert one["wsgi.input"][0] == '{"one": 1}'
     webserver.stop()
 
+
 def test_module_http_content_type():
 
     webserver = WebServer()
@@ -132,6 +132,7 @@ def test_module_http_content_type():
 
     assert one["CONTENT_TYPE"] == "monkeyballs"
     webserver.stop()
+
 
 def test_module_http_accept():
 
@@ -152,26 +153,6 @@ def test_module_http_accept():
     assert one["HTTP_ACCEPT"] == "monkeyballs"
     webserver.stop()
 
-def test_module_http_post_with_additional_headers():
-
-    webserver = WebServer()
-    webserver.start()
-
-    actor_config = ActorConfig('httpoutclient', 100, 1, {}, "")
-    http = HTTPOutClient(actor_config, url="http://localhost:8088/", method="POST", additional_headers={'X-Remote-Auth': 'token'})
-    http.pool.queue.inbox.disableFallThrough()
-    http.start()
-
-    e = Event('{"one": 1}')
-
-    http.pool.queue.inbox.put(e)
-
-    one = webserver.q.get()
-
-    assert one["REQUEST_METHOD"] == "POST"
-    assert one["HTTP_X_REMOTE_AUTH"] == "token"
-    assert one["wsgi.input"][0] == '{"one": 1}'
-    webserver.stop()
 
 def test_module_http_username_password():
 
@@ -191,6 +172,7 @@ def test_module_http_username_password():
 
     assert one["HTTP_AUTHORIZATION"] == "Basic dXNlcm5hbWU6cGFzc3dvcmQ="
     webserver.stop()
+
 
 def test_module_http_timeout():
 
