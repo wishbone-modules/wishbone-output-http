@@ -4,7 +4,7 @@
     .--.--.--|__.-----|  |--|  |--.-----.-----.-----.
     |  |  |  |  |__ --|     |  _  |  _  |     |  -__|
     |________|__|_____|__|__|_____|_____|__|__|_____|
-                                       version 2.1.3
+                                       version 2.2.0
 
     Build composable event pipeline servers with minimal effort.
 
@@ -14,7 +14,7 @@
     wishbone.output.http
     ====================
 
-    Version: 1.0.1
+    Version: 1.1.0
 
     Submit data to a http API.
     --------------------------
