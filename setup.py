@@ -27,11 +27,11 @@ from setuptools.command.test import test as TestCommand
 import sys
 
 PROJECT = 'wishbone_output_http'
-VERSION = '1.1.0'
+VERSION = '1.2.0'
 
 install_requires = [
     'wishbone>=2.1.1',
-    'requests==2.9.1',
+    'requests',
 ]
 
 try:
