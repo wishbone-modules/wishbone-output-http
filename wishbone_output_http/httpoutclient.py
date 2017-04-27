@@ -69,6 +69,9 @@ class HTTPOutClient(Actor):
         - timeout(float)(10)*
            |  The maximum amount of time in seconds the request is allowed to take.
 
+        - verify_ssl(bool)(True)
+           |  Validate the SSL certificate
+
 
     Queues:
 
@@ -86,20 +89,14 @@ class HTTPOutClient(Actor):
                  username=None,
                  password=None,
                  allow_redirects=False,
-                 timeout=10):
+                 timeout=10,
+                 verify_ssl=True):
 
         Actor.__init__(self, config)
         self.pool.createQueue("inbox")
         self.registerConsumer(self.consume, "inbox")
 
     def preHook(self):
-
-        if self.kwargs.method == "PUT":
-            self.submitToResource = self.__put
-        elif self.kwargs.method == "POST":
-            self.submitToResource = self.__post
-        else:
-            raise Exception("Invalid http method defined: '%s'." % self.kwargs.method)
 
         if self.kwargs.url.startswith('https'):
             monkey.patch_ssl()
@@ -112,8 +109,14 @@ class HTTPOutClient(Actor):
             data = str(event.get(self.kwargs.selection))
         response = None
 
+        method = self.kwargs.method
         try:
-            response = self.submitToResource(data)
+            if method == "PUT":
+                response = self.__put(data)
+            elif method == "POST":
+                response = self.__post(data)
+            else:
+                raise Exception("Invalid http method defined: '%s'." % method)
             response.close()
             response.raise_for_status()
         except Exception as err:
@@ -144,7 +147,8 @@ class HTTPOutClient(Actor):
             auth=(self.kwargs.username, self.kwargs.password),
             headers=headers,
             allow_redirects=self.kwargs.allow_redirects,
-            timeout=self.kwargs.timeout
+            timeout=self.kwargs.timeout,
+            verify=self.kwargs.verify_ssl
         )
 
     def __post(self, data):
@@ -158,5 +162,6 @@ class HTTPOutClient(Actor):
             auth=(self.kwargs.username, self.kwargs.password),
             headers=headers,
             allow_redirects=self.kwargs.allow_redirects,
-            timeout=self.kwargs.timeout
+            timeout=self.kwargs.timeout,
+            verify=self.kwargs.verify_ssl
         )
