@@ -231,6 +231,8 @@ def test_module_http_ok_server_response():
     http.pool.queue.inbox.put(e)
     sleep(1)
     assert(e.get("@tmp.httpoutclient.server_response_json")["message"] == "hello world!")
+    http.stop()
+    webserver.stop()
 
 def test_module_http_dynamic_method():
 
@@ -258,4 +260,5 @@ def test_module_http_dynamic_method():
     http.pool.queue.inbox.put(Event('{"one": 1}'))
     sleep(1)
     assert getter(webserver.q)["REQUEST_METHOD"] == "PUT"
-
+    http.stop()
+    webserver.stop()
