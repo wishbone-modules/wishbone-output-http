@@ -31,6 +31,10 @@ from gevent.pywsgi import WSGIServer
 from gevent.queue import Queue
 from gevent import spawn, sleep
 
+from uplook import UpLook
+
+from itertools import cycle
+
 
 class WebServer():
 
@@ -227,3 +231,31 @@ def test_module_http_ok_server_response():
     http.pool.queue.inbox.put(e)
     sleep(1)
     assert(e.get("@tmp.httpoutclient.server_response_json")["message"] == "hello world!")
+
+def test_module_http_dynamic_method():
+
+    from wishbone.lookup import Lookup
+    class GetMethod(Lookup):
+        def __init__(self):
+            self.a = cycle(["POST", "PUT"])
+
+        def lookup(self):
+            return next(self.a)
+
+    webserver = WebServer()
+    webserver.start()
+
+    actor_config = ActorConfig('httpoutclient', 100, 1, {"method": GetMethod().lookup}, "")
+    http = HTTPOutClient(actor_config, url="http://localhost:8088/", accept="monkeyballs", method="~~method()")
+
+    http.pool.queue.inbox.disableFallThrough()
+    http.start()
+
+    http.pool.queue.inbox.put(Event('{"one": 1}'))
+    sleep(1)
+    assert getter(webserver.q)["REQUEST_METHOD"] == "POST"
+
+    http.pool.queue.inbox.put(Event('{"one": 1}'))
+    sleep(1)
+    assert getter(webserver.q)["REQUEST_METHOD"] == "PUT"
+

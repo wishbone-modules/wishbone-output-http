@@ -98,13 +98,6 @@ class HTTPOutClient(Actor):
 
     def preHook(self):
 
-        if self.kwargs.method == "PUT":
-            self.submitToResource = self.__put
-        elif self.kwargs.method == "POST":
-            self.submitToResource = self.__post
-        else:
-            raise Exception("Invalid http method defined: '%s'." % self.kwargs.method)
-
         if self.kwargs.url.startswith('https'):
             monkey.patch_ssl()
 
@@ -116,8 +109,14 @@ class HTTPOutClient(Actor):
             data = str(event.get(self.kwargs.selection))
         response = None
 
+        method = self.kwargs.method
         try:
-            response = self.submitToResource(data)
+            if method == "PUT":
+                response = self.__put(data)
+            elif method == "POST":
+                response = self.__post(data)
+            else:
+                raise Exception("Invalid http method defined: '%s'." % method)
             response.close()
             response.raise_for_status()
         except Exception as err:
