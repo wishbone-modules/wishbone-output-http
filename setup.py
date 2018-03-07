@@ -27,10 +27,10 @@ from setuptools.command.test import test as TestCommand
 import sys
 
 PROJECT = 'wishbone_output_http'
-VERSION = '1.2.2'
+VERSION = '3.0.1'
 
 install_requires = [
-    'wishbone>=2.1.1',
+    'wishbone>=3.0.4',
     'requests',
 ]
 
@@ -63,12 +63,12 @@ setup(
     author='Jelle Smet',
     author_email='development@smetj.net',
 
-    url='https://github.com/smetj/wishbone-output-http',
+    url='https://github.com/wishbone-modules/wishbone-output-http',
     download_url='https://github.com/smetj/wishbone-output-http/tarball/master',
     classifiers=['Development Status :: 5 - Production/Stable',
                  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
                  'Programming Language :: Python',
-                 'Programming Language :: Python :: 2.7',
+                 'Programming Language :: Python :: 3',
                  'Programming Language :: Python :: Implementation :: PyPy',
                  'Intended Audience :: Developers',
                  'Intended Audience :: System Administrators',
@@ -86,7 +86,7 @@ setup(
     packages=find_packages(),
     zip_safe=False,
     entry_points={
-        'wishbone.output': [
+        'wishbone_contrib.module.output': [
             'http=wishbone_output_http:HTTPOutClient',
         ]
     }
