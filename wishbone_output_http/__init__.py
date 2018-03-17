@@ -52,8 +52,11 @@ class HTTPOutClient(OutputModule):
         - method(str)("PUT")
            |  The http method to use. PUT/POST
 
-        - native_event(bool)(False)
+        - native_events(bool)(False)
            |  Submit Wishbone native events.
+
+        - parallel_streams(int)(1)
+           |  The number of outgoing parallel data streams.
 
         - password(str)*
            |  The password to authenticate
@@ -86,7 +89,7 @@ class HTTPOutClient(OutputModule):
     '''
 
     def __init__(self, config,
-                 selection="data", payload=None, native_event=False,
+                 selection="data", payload=None, native_events=False, parallel_streams=1,
                  method="PUT", pool_size=1,
                  content_type="application/json", accept="text/plain",
                  additional_headers={},

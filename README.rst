@@ -10,10 +10,12 @@
   wishbone_contrib.module.output.http
   ===================================
 
-  Version: 3.0.0
+  Version: 3.0.2
 
   Submit data to a http API.
   --------------------------
+  **Submit data to a http API.**
+
       Submit data to a http API.
 
 
@@ -34,8 +36,11 @@
           - method(str)("PUT")
              |  The http method to use. PUT/POST
 
-          - native_event(bool)(False)
+          - native_events(bool)(False)
              |  Submit Wishbone native events.
+
+          - parallel_streams(int)(1)
+             |  The number of outgoing parallel data streams.
 
           - password(str)*
              |  The password to authenticate
