@@ -55,6 +55,9 @@ class HTTPOutClient(OutputModule):
         - native_events(bool)(False)
            |  Submit Wishbone native events.
 
+        - parallel_streams(int)(1)
+           |  The number of outgoing parallel data streams.
+
         - password(str)*
            |  The password to authenticate
 
