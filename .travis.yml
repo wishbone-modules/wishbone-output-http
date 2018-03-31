@@ -1,10 +1,18 @@
 language: python
 python:
-  - "3.6"
+- '3.6'
 install:
-  - python setup.py install
-  - pip install pytest
-  - pip install wishbone-input-httpserver
-
+- python setup.py install
+- pip install pytest
+- pip install wishbone-input-httpserver
 script:
-  - pytest -s -v tests/default.py
+- pytest -s -v tests/default.py
+notifications:
+  webhooks:
+    urls:
+    - secure: l11m4OLqh6Q7EFhIJiw6dWPJNq7wmiJrKBH7LSNavvRdUunNUppP7/aitppFCTmMeLBexKCuB66abSPdK6kqPV7yTfBrSy5hKlp/NqjQUJzle6dtkEyGlrceWxl8JiC38W5ZmIw9T089jvyiGiS2rIboFBK/615g3edCpGJlhDzeWnZ0pWVk/194qUwh/djnSEfm7Waa9Kq0K/XjyJFXm4CPPvK3dNRaqhtO8Vs1SwSYAzoVmil2gprOzDVnLJ7ATaXwFFA5IsOMbkIU0e0SyQOKc1sBw0pcz8/etmeOjt20y4TKSD/SnPpNw9uo6l1DZXXKP8EVzesedYz5GJG4bX3OvMjq8dZz2G/Hh3mQ2iomspAkYUS3XyG0qh+YfxCSOV+lUt7w5LD0S1BbXFkAzlgUxhmfosLH+jqiIWY3FHOFkfvfq1wDPQMB6SnjSalIG+3C7r6L29FRs/2HJW7jhpkxtZVD+RhYMB0ghlQtC5llfenkP4uk4iV+Cgna+vZg9hm9PjbLdDQxNiQNwExeI/q+7CSfYPYx0Ers7MUpY2JmALe2+vjZlHrmfV6/sUCc/grWECnIoC3NLKZuWFl1KwhXwfiGqbVg3o+SJCaOY0cJxeEwtwFHoGPEWG77MSgq5fX7hvcLQ2vnil85FcBMT2QkXYOhPCWfK+QyI7oHnXw=
+    on_success: always
+    on_failure: always
+    on_start: change
+    on_cancel: always
+    on_error: always
